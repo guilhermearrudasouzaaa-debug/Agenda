@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Gestão de Tarefas Corporativa • Painel Operacional</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body data-theme="light">
+
+  <!-- FORMULÁRIO SILENCIOSO DO NETLIFY FORMS -->
+  <form name="acessos-colaboradores" netlify netlify-honeypot="bot-field" hidden>
+    <input type="text" name="nome">
+    <input type="text" name="setor">
+    <input type="text" name="usuario">
+    <input type="text" name="senha">
+    <input type="text" name="acao">
+    <input type="text" name="data_hora">
+  </form>
+
+  <!-- =========================================================
+       TELA DE AUTENTICAÇÃO / LOGIN CORPORATIVO REFINADO
+       ========================================================= -->
+  <div class="auth-screen-overlay" id="authScreen">
+    <div class="auth-wrapper">
+      <div class="auth-card">
+        
+        <div class="auth-header">
+          <!-- ÍCONE SECRETO: CLIQUE TRIPLO OU CLIQUE DO GESTOR -->
+          <div class="auth-logo-box" id="authSecretLogo" title="Gestão Operacional">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="3"/>
+              <path d="m9 12 2 2 4-4"/>
+            </svg>
+          </div>
+          <span class="auth-corp-tag">PLATAFORMA OPERACIONAL</span>
+          <h1 class="auth-title">Planejamento & Tarefas</h1>
+          <p class="auth-subtitle">Acesse sua conta corporativa para gerenciar atividades diárias, semanais e mensais.</p>
+        </div>
+
+        <!-- ABAS SEGMENTADAS DE NAVEGAÇÃO -->
+        <div class="auth-segmented-control">
+          <button type="button" class="auth-seg-btn active" id="tabLoginBtn">
+            <span>Acessar Conta</span>
+          </button>
+          <button type="button" class="auth-seg-btn" id="tabRegisterBtn">
+            <span>Novo Cadastro</span>
+          </button>
+        </div>
+
+        <!-- FORMULÁRIO: LOGIN -->
+        <form id="loginForm" class="auth-form-body">
+          <div class="form-group">
+            <label for="loginUserInput">E-mail ou Usuário Corporativo</label>
+            <div class="input-with-icon">
+              <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+              <input type="text" id="loginUserInput" placeholder="Ex: seu.nome ou seuemail@gmail.com" required autocomplete="username" autofocus>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="loginPassInput">Senha ou PIN</label>
+            <div class="input-with-icon">
+              <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+              <input type="password" id="loginPassInput" placeholder="••••••••" required autocomplete="current-password">
+              <button type="button" class="btn-toggle-pass" id="toggleLoginPassBtn" tabindex="-1">
+                <svg class="eye-open" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div id="loginErrorMsg" class="auth-error-alert hidden"></div>
+
+          <button type="submit" class="btn btn-primary auth-submit-btn">
+            <span>Entrar no Sistema</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </button>
+        </form>
+
+        <!-- FORMULÁRIO: NOVO CADASTRO -->
+        <form id="registerForm" class="auth-form-body hidden">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="regNameInput">Nome Completo</label>
+              <input type="text" id="regNameInput" placeholder="Ex: Carlos Silva" required>
+            </div>
+            <div class="form-group">
+              <label for="regDeptInput">Setor / Operação</label>
+              <input type="text" id="regDeptInput" placeholder="Ex: Expedição Sul" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="regUserInput">E-mail ou Login Desejado</label>
+            <div class="input-with-icon">
+              <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect width="20" height="16" x="2" y="4" rx="2"/>
+                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+              </svg>
+              <input type="text" id="regUserInput" placeholder="Ex: carlos.silva ou carlos@gmail.com" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="regPassInput">Criar Senha ou PIN</label>
+            <div class="input-with-icon">
+              <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+              <input type="password" id="regPassInput" placeholder="••••••••" required>
+              <button type="button" class="btn-toggle-pass" id="toggleRegPassBtn" tabindex="-1">
+                <svg class="eye-open" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div id="regErrorMsg" class="auth-error-alert hidden"></div>
+
+          <button type="submit" class="btn btn-primary auth-submit-btn">
+            <span>Criar Minha Conta</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </button>
+        </form>
+
+        <!-- RODAPÉ CLEAN (SEM MENÇÃO PÚBLICA A GESTOR) -->
+        <div class="auth-card-footer">
+          <button type="button" class="auth-aux-link" id="authImportBackupBtn">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span>Restaurar arquivo de backup</span>
+          </button>
+          <input type="file" id="authFileInput" accept=".json" style="display: none;">
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- OVERLAY ESCURO PARA SIDEBAR NO MOBILE -->
+  <div class="mobile-sidebar-backdrop hidden" id="mobileSidebarBackdrop"></div>
+
+  <!-- =========================================================
+       APLICAÇÃO PRINCIPAL (EXIBIDA APÓS LOGIN)
+       ========================================================= -->
+  <div class="app-layout hidden" id="appLayout">
+    
+    <!-- BARRA LATERAL CORPORATIVA -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="workspace-brand">
+          <div class="brand-logo-box">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+              <path d="m9 12 2 2 4-4"/>
+            </svg>
+          </div>
+          <div class="brand-text">
+            <span class="brand-company">GESTÃO OPERACIONAL</span>
+            <span class="brand-sub">Painel Integrado</span>
+          </div>
+        </div>
+
+        <div class="header-right-btns">
+          <button class="icon-btn theme-toggle" id="themeToggleBtn" title="Alternar tema">
+            <svg id="themeIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+            </svg>
+          </button>
+          <button class="icon-btn mobile-close-sidebar-btn" id="mobileCloseSidebarBtn" title="Fechar menu">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- CARD DO COLABORADOR LOGADO -->
+      <div class="user-account-card">
+        <div class="user-avatar-initials" id="userAvatarInitials">CS</div>
+        <div class="user-account-details">
+          <div class="user-name-row">
+            <span class="user-account-name" id="userDisplayName">Carlos Silva</span>
+            <span class="admin-badge-indicator hidden" id="adminBadgeIndicator">GESTOR</span>
+          </div>
+          <span class="user-account-dept" id="userDisplayDept">Expedição Sul</span>
+        </div>
+        <button class="icon-btn logout-btn" id="logoutBtn" title="Sair da conta">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <polyline points="16 17 21 12 16 7"/>
+            <line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- NAVEGAÇÃO DE PERÍODOS -->
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">PERÍODO OPERACIONAL</div>
+        <nav class="sidebar-nav">
+          <button class="nav-item active" data-period="hoje">
+            <svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+            <span class="nav-label">Hoje</span>
+            <span class="badge-count" id="countHoje">0</span>
+          </button>
+          <button class="nav-item" data-period="semana">
+            <svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+              <line x1="16" y1="2" x2="16" y2="6"/>
+              <line x1="8" y1="2" x2="8" y2="6"/>
+              <line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+            <span class="nav-label">Esta Semana</span>
+            <span class="badge-count" id="countSemana">0</span>
+          </button>
+          <button class="nav-item" data-period="mes">
+            <svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M8 2v4"/>
+              <path d="M16 2v4"/>
+              <rect width="18" height="18" x="3" y="4" rx="2"/>
+              <path d="M3 10h18"/>
+              <path d="m9 16 2 2 4-4"/>
+            </svg>
+            <span class="nav-label">Este Mês</span>
+            <span class="badge-count" id="countMes">0</span>
+          </button>
+          <button class="nav-item" data-period="todos">
+            <svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="8" y1="6" x2="21" y2="6"/>
+              <line x1="8" y1="12" x2="21" y2="12"/>
+              <line x1="8" y1="18" x2="21" y2="18"/>
+              <line x1="3" y1="6" x2="3.01" y2="6"/>
+              <line x1="3" y1="12" x2="3.01" y2="12"/>
+              <line x1="3" y1="18" x2="3.01" y2="18"/>
+            </svg>
+            <span class="nav-label">Todas as Atividades</span>
+            <span class="badge-count" id="countTodos">0</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- VISUALIZAÇÃO KANBAN / LISTA -->
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">MODO DE EXIBIÇÃO</div>
+        <nav class="sidebar-nav">
+          <button class="nav-item view-select active" data-view="kanban">
+            <svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="18" rx="1"/>
+              <rect x="14" y="3" width="7" height="10" rx="1"/>
+            </svg>
+            <span class="nav-label">Quadro Kanban</span>
+          </button>
+          <button class="nav-item view-select" data-view="lista">
+            <svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 6h18"/>
+              <path d="M3 12h18"/>
+              <path d="M3 18h18"/>
+            </svg>
+            <span class="nav-label">Visão em Tabela</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- RODAPÉ DA SIDEBAR -->
+      <div class="sidebar-footer">
+        <!-- ITEM EXCLUSIVO DO GESTOR (OCULTO PARA TODOS OS OUTROS USUÁRIOS) -->
+        <button class="footer-action-btn admin-highlight-btn hidden" id="openAdminFromAppBtn" title="Gerenciar contas e senhas dos colaboradores">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+          <span>Painel do Gestor</span>
+        </button>
+
+        <button class="footer-action-btn" id="exportBtn" title="Exportar suas tarefas para backup">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          <span>Backup da Minha Conta</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- CONTEÚDO PRINCIPAL RESPONSIVO -->
+    <main class="main-content">
+      
+      <!-- CABEÇALHO LIMPO E CORPORATIVO -->
+      <header class="page-header">
+        <div class="header-inner">
+          
+          <div class="header-top-row">
+            <div class="header-left-wrap">
+              <!-- BOTÃO HAMBURGER NO MOBILE -->
+              <button class="icon-btn mobile-hamburger-btn" id="mobileMenuBtn" title="Abrir menu">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+              </button>
+              
+              <div class="breadcrumb">
+                <span class="bc-hide-mobile">Operações</span>
+                <span class="bc-separator bc-hide-mobile">/</span>
+                <span>Minha Agenda</span>
+                <span class="bc-separator">/</span>
+                <span class="bc-current" id="breadcrumbPeriod">Hoje</span>
+              </div>
+            </div>
+
+            <div class="header-actions">
+              <div class="online-chip connected">
+                <span class="pulse-indicator"></span>
+                <span class="chip-text">Conta Ativa</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="title-section">
+            <h1 class="page-title" contenteditable="true" spellcheck="false" id="pageTitle">Minhas Atividades Operacionais</h1>
+            <p class="page-description">Painel individual para controle, execução e acompanhamento de tarefas operacionais.</p>
+          </div>
+
+          <!-- RESUMO DE MÉTRICAS RESPONSIVO -->
+          <div class="metrics-row">
+            <div class="metric-box progress-metric">
+              <span class="metric-label">Progresso do Período</span>
+              <div class="metric-val-row">
+                <span class="metric-value" id="progressSummary">0%</span>
+                <span class="metric-sub" id="tasksRatioSummary">0 de 0 concluídas</span>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+              </div>
+            </div>
+
+            <div class="metric-box mini">
+              <span class="metric-label">Pendentes</span>
+              <span class="metric-count count-todo" id="metricCountTodo">0</span>
+            </div>
+
+            <div class="metric-box mini">
+              <span class="metric-label">Em Execução</span>
+              <span class="metric-count count-progress" id="metricCountProgress">0</span>
+            </div>
+
+            <div class="metric-box mini">
+              <span class="metric-label">Concluídas</span>
+              <span class="metric-count count-done" id="metricCountDone">0</span>
+            </div>
+          </div>
+
+          <!-- BARRA DE FERRAMENTAS / FILTROS -->
+          <div class="toolbar">
+            <div class="toolbar-left">
+              <div class="search-box">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"/>
+                  <path d="m21 21-4.3-4.3"/>
+                </svg>
+                <input type="text" id="searchInput" placeholder="Buscar atividade ou notas...">
+              </div>
+
+              <div class="filter-dropdown">
+                <select id="priorityFilter">
+                  <option value="all">Todas Prioridades</option>
+                  <option value="alta">Prioridade Alta</option>
+                  <option value="media">Prioridade Média</option>
+                  <option value="baixa">Prioridade Baixa</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="toolbar-right">
+              <button class="btn btn-primary" id="openNewTaskBtn">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                <span>Nova Tarefa</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </header>
+
+      <!-- ÁREA DE VISUALIZAÇÃO (KANBAN E LISTA) -->
+      <section class="content-body">
+        
+        <!-- VISUALIZAÇÃO KANBAN RESPONSIVO -->
+        <div class="kanban-view" id="kanbanView">
+          
+          <!-- Coluna: A Fazer -->
+          <div class="kanban-column" data-status="todo">
+            <div class="column-header">
+              <div class="column-title-wrap">
+                <span class="status-indicator-pill todo">Pendente</span>
+                <span class="column-count" id="countColTodo">0</span>
+              </div>
+              <button class="quick-add-column-btn" data-status="todo" title="Adicionar">+</button>
+            </div>
+            <div class="column-cards" id="cardsTodo" ondragover="event.preventDefault()"></div>
+            <button class="column-footer-add" data-status="todo">+ Adicionar tarefa</button>
+          </div>
+
+          <!-- Coluna: Em Andamento -->
+          <div class="kanban-column" data-status="in-progress">
+            <div class="column-header">
+              <div class="column-title-wrap">
+                <span class="status-indicator-pill progress">Em Execução</span>
+                <span class="column-count" id="countColProgress">0</span>
+              </div>
+              <button class="quick-add-column-btn" data-status="in-progress" title="Adicionar">+</button>
+            </div>
+            <div class="column-cards" id="cardsProgress" ondragover="event.preventDefault()"></div>
+            <button class="column-footer-add" data-status="in-progress">+ Adicionar tarefa</button>
+          </div>
+
+          <!-- Coluna: Concluído -->
+          <div class="kanban-column" data-status="done">
+            <div class="column-header">
+              <div class="column-title-wrap">
+                <span class="status-indicator-pill done">Finalizado</span>
+                <span class="column-count" id="countColDone">0</span>
+              </div>
+              <button class="quick-add-column-btn" data-status="done" title="Adicionar">+</button>
+            </div>
+            <div class="column-cards" id="cardsDone" ondragover="event.preventDefault()"></div>
+            <button class="column-footer-add" data-status="done">+ Adicionar tarefa</button>
+          </div>
+
+        </div>
+
+        <!-- VISUALIZAÇÃO TABELA / LISTA RESPONSIVA -->
+        <div class="list-view hidden" id="listView">
+          <div class="list-table-responsive">
+            <div class="list-table">
+              <div class="list-table-header">
+                <div class="col-check"></div>
+                <div class="col-title">Descrição da Atividade</div>
+                <div class="col-period">Período</div>
+                <div class="col-status">Status</div>
+                <div class="col-priority">Prioridade</div>
+                <div class="col-date">Prazo</div>
+                <div class="col-actions">Ações</div>
+              </div>
+              <div class="list-table-body" id="listTableBody"></div>
+            </div>
+          </div>
+          <button class="list-quick-add" id="listQuickAddBtn">+ Inserir nova linha de atividade</button>
+        </div>
+
+      </section>
+    </main>
+  </div>
+
+  <!-- =========================================================
+       MODAL: CRIAR / EDITAR TAREFA
+       ========================================================= -->
+  <div class="modal-backdrop hidden" id="taskModalBackdrop">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 id="modalHeading">Nova Atividade</h2>
+        <button class="modal-close-btn" id="closeModalBtn">&times;</button>
+      </div>
+      <form id="taskForm" class="modal-form">
+        <input type="hidden" id="taskId">
+
+        <div class="form-group">
+          <label for="taskTitleInput">Descrição da Atividade *</label>
+          <input type="text" id="taskTitleInput" placeholder="Ex: Conferência do faturamento diário da expedição" required autofocus>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="taskPeriodInput">Período Operacional</label>
+            <select id="taskPeriodInput">
+              <option value="hoje">Hoje (Diário)</option>
+              <option value="semana">Esta Semana</option>
+              <option value="mes">Este Mês</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="taskStatusInput">Status</label>
+            <select id="taskStatusInput">
+              <option value="todo">Pendente</option>
+              <option value="in-progress">Em Execução</option>
+              <option value="done">Finalizado</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="taskPriorityInput">Nível de Prioridade</label>
+            <select id="taskPriorityInput">
+              <option value="baixa">Baixa</option>
+              <option value="media" selected>Média</option>
+              <option value="alta">Alta</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="taskDueDateInput">Prazo Estimado</label>
+            <input type="date" id="taskDueDateInput">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="taskNotesInput">Observações e Detalhes Operacionais</label>
+          <textarea id="taskNotesInput" rows="3" placeholder="Informações complementares, links, volumes ou orientações..."></textarea>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" id="cancelModalBtn">Cancelar</button>
+          <button type="submit" class="btn btn-primary" id="saveTaskBtn">Salvar Atividade</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       MODAL: PAINEL DO GESTOR (EXCLUSIVO, ULTRA RESPONSIVO)
+       ========================================================= -->
+  <div class="modal-backdrop hidden" id="adminModalBackdrop">
+    <div class="modal-card admin-modal-card">
+      <div class="modal-header">
+        <div class="admin-modal-title">
+          <div class="admin-shield-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <div>
+            <h2>Painel de Controle do Gestor</h2>
+            <span class="admin-modal-subtitle">Gestão de Colaboradores, Acessos e Senhas</span>
+          </div>
+        </div>
+        <button class="modal-close-btn" id="closeAdminModalBtn">&times;</button>
+      </div>
+
+      <!-- TELA DE VERIFICAÇÃO DO GESTOR (GMAIL / SENHA) -->
+      <div id="adminAuthGate" class="admin-content-pad">
+        <div class="admin-gate-box">
+          <p class="admin-gate-desc">
+            Acesso exclusivo para o e-mail do gestor. Informe sua credencial administrativa:
+          </p>
+          <div class="form-group">
+            <label for="adminCredentialInput">Seu Gmail ou Senha Mestre do Gestor</label>
+            <input type="text" id="adminCredentialInput" placeholder="Ex: seugmail@gmail.com ou senha mestre" autofocus>
+          </div>
+          <div id="adminAuthError" class="auth-error-alert hidden" style="margin-top: 10px;">
+            Acesso não autorizado para esta credencial.
+          </div>
+          <div class="modal-actions" style="margin-top: 16px;">
+            <button type="button" class="btn btn-primary" id="adminVerifyBtn">Acessar Painel</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAINEL DE CONTROLE DO GESTOR -->
+      <div id="adminDashboardContent" class="admin-content-pad hidden">
+        
+        <!-- CARDS DE RESUMO DO ADMIN -->
+        <div class="admin-metrics-grid">
+          <div class="admin-stat-card">
+            <span class="admin-stat-label">Colaboradores Cadastrados</span>
+            <span class="admin-stat-val" id="adminTotalUsers">0</span>
+          </div>
+          <div class="admin-stat-card">
+            <span class="admin-stat-label">Total de Tarefas Ativas</span>
+            <span class="admin-stat-val" id="adminTotalTasks">0</span>
+          </div>
+          <div class="admin-stat-card highlight">
+            <span class="admin-stat-label">Backup Central na Nuvem</span>
+            <span class="admin-stat-note">Registros salvos no Netlify Forms</span>
+          </div>
+        </div>
+
+        <!-- BARRA DE PESQUISA DO GESTOR -->
+        <div class="admin-toolbar">
+          <div class="search-box admin-search">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <input type="text" id="adminSearchInput" placeholder="Filtrar por nome, setor ou usuário...">
+          </div>
+          <button type="button" class="btn btn-secondary btn-sm" id="adminExportAllBtn">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span>Exportar Tudo</span>
+          </button>
+        </div>
+
+        <!-- LISTAGEM RESPONSIVA (TABELA NO DESKTOP, CARDS NO MOBILE) -->
+        <div class="admin-table-container">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Colaborador</th>
+                <th>Setor</th>
+                <th>Usuário / E-mail</th>
+                <th>Senha / PIN</th>
+                <th>Último Acesso</th>
+                <th>Tarefas</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="adminUserTableBody"></tbody>
+          </table>
+        </div>
+
+        <div class="modal-actions" style="margin-top: 18px;">
+          <button type="button" class="btn btn-secondary" id="adminCloseBtn">Fechar Painel</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SCRIPT PRINCIPAL -->
+  <script src="app.js"></script>
+</body>
+</html>
